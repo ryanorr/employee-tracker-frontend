@@ -15,7 +15,7 @@ const initialState = {
     is_team_lead: false,
 };
 
-function AddEmployee() {
+const AddEmployee = ({ onEmployeeAdded }) => {
     const [showModal, setShowModal] = useState(false);
     const [employee, setEmployee] = useState(initialState);
 
@@ -36,6 +36,9 @@ function AddEmployee() {
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/employees`, data);
             setEmployee(initialState);
+            if (onEmployeeAdded) {
+                onEmployeeAdded();
+            }
             alert('Employee added successfully');
         } catch (error) {
             console.error('Error adding employee:', error);

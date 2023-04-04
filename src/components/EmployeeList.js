@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import EditEmployee from "./EditEmployee.js";
+import AddEmployee from "./AddEmployee.js";
+import UpdateTerminationDate from "./UpdateTerminationDate.js";
 import Modal from "./Modal/Modal.js";
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
-    const [editingEmployee, setEditingEmployee] = useState(null);
-
-    useEffect(() => {
-        fetchEmployees();
-    }, []);
+    const [editingEmployee, setEditingEmployee] = useState("");
+    const [updatingTerminationDate, setUpdatingTerminationDate] = useState("");
 
     const fetchEmployees = async () => {
         try {
@@ -21,6 +20,10 @@ const EmployeeList = () => {
             alert('Error fetching employees');
         }
     };
+
+    useEffect(() => {
+        fetchEmployees();
+    }, []);
 
     const handleEdit = (employee) => {
         setEditingEmployee(employee);
@@ -33,8 +36,20 @@ const EmployeeList = () => {
         }
     }
 
+    const handleUpdateTerminationDate = (employee) => {
+        setUpdatingTerminationDate(employee);
+    }
+
+    const handleCloseUpdateTerminationDate = (refreshList) => {
+        setUpdatingTerminationDate(null);
+        if (refreshList) {
+            fetchEmployees();
+        }
+    }
+
     return (
         <div>
+            <AddEmployee onEmployeeAdded={fetchEmployees} />
             <table>
                 <thead>
                     <tr>
@@ -62,7 +77,7 @@ const EmployeeList = () => {
                             <td>{employee.is_team_lead ? 'Yes' : 'No'}</td>
                             <td>
                                 <button onClick={() => handleEdit(employee)}>Edit</button>
-                                <button onClick={() => console.log('Delete', employee.id)}>Delete</button>
+                                <button onClick={() => handleUpdateTerminationDate(employee)}>Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -73,6 +88,15 @@ const EmployeeList = () => {
                     <EditEmployee
                         employee={editingEmployee}
                         onClose={handleCloseEdit}
+                    />
+                </Modal>
+            )}
+
+            {updatingTerminationDate && (
+                <Modal show={updatingTerminationDate} onClose={handleCloseUpdateTerminationDate}>
+                    <UpdateTerminationDate
+                        employee={updatingTerminationDate}
+                        onClose={handleCloseUpdateTerminationDate}
                     />
                 </Modal>
             )}
