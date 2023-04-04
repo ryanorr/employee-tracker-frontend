@@ -10,6 +10,7 @@ const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
     const [editingEmployee, setEditingEmployee] = useState("");
     const [updatingTerminationDate, setUpdatingTerminationDate] = useState("");
+    const [sort, setSort] = useState({key:"name", direction: "asc"});
 
     const fetchEmployees = async () => {
         try {
@@ -47,19 +48,34 @@ const EmployeeList = () => {
         }
     }
 
+    const sortEmployees = (key) => {
+        const direction = sort.direction === "asc" ? "desc" : "asc";
+        const sortedEmployees = [...employees].sort((a, b) => {
+            if (a[key] < b[key]) {
+                return direction === "asc" ? -1 : 1;
+            }
+            if (a[key] > b[key]) {
+                return direction === "asc" ? 1 : -1;
+            }
+            return 0;
+        });
+        setSort({key, direction});
+        setEmployees(sortedEmployees);
+    }
+
     return (
         <div>
             <AddEmployee onEmployeeAdded={fetchEmployees} />
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>Company</th>
-                        <th>LCAT</th>
-                        <th>Team</th>
-                        <th>Start Date</th>
+                        <th onClick={() => sortEmployees("name")}>Name</th>
+                        <th onClick={() => sortEmployees("email")}>Email</th>
+                        <th onClick={() => sortEmployees("phone_number")}>Phone Number</th>
+                        <th onClick={() => sortEmployees("company")}>Company</th>
+                        <th onClick={() => sortEmployees("lcat")}>LCAT</th>
+                        <th onClick={() => sortEmployees("assigned_team")}>Assigned Team</th>
+                        <th onClick={() => sortEmployees("start_date")}>Start Date</th>
                         <th>Team Lead?</th>
                         <th>Actions</th>
                     </tr>
