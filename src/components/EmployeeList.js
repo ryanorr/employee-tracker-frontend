@@ -5,6 +5,7 @@ import EditEmployee from "./EditEmployee.js";
 import AddEmployee from "./AddEmployee.js";
 import UpdateTerminationDate from "./UpdateTerminationDate.js";
 import Modal from "./Modal/Modal.js";
+import 'tailwindcss/tailwind.css';
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
@@ -64,58 +65,64 @@ const EmployeeList = () => {
     }
 
     return (
-        <div>
-            <AddEmployee onEmployeeAdded={fetchEmployees} />
-            <table>
-                <thead>
-                    <tr>
-                        <th onClick={() => sortEmployees("name")}>Name</th>
-                        <th onClick={() => sortEmployees("email")}>Email</th>
-                        <th onClick={() => sortEmployees("phone_number")}>Phone Number</th>
-                        <th onClick={() => sortEmployees("company")}>Company</th>
-                        <th onClick={() => sortEmployees("lcat")}>LCAT</th>
-                        <th onClick={() => sortEmployees("assigned_team")}>Assigned Team</th>
-                        <th onClick={() => sortEmployees("start_date")}>Start Date</th>
-                        <th>Team Lead?</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {employees.map((employee) => (
-                        <tr key={employee.id}>
-                            <td>{employee.name}</td>
-                            <td>{employee.email}</td>
-                            <td>{employee.phone_number}</td>
-                            <td>{employee.company}</td>
-                            <td>{employee.lcat}</td>
-                            <td>{employee.assigned_team}</td>
-                            <td>{employee.start_date}</td>
-                            <td>{employee.is_team_lead ? 'Yes' : 'No'}</td>
-                            <td>
-                                <button onClick={() => handleEdit(employee)}>Edit</button>
-                                <button onClick={() => handleUpdateTerminationDate(employee)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            {editingEmployee && (
-                <Modal show={editingEmployee} onClose={handleCloseEdit}>
-                    <EditEmployee
-                        employee={editingEmployee}
-                        onClose={handleCloseEdit}
-                    />
-                </Modal>
-            )}
+        <div className="flex flex-col">
+            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                    <div className="overflow-hidden">
+                        <AddEmployee onEmployeeAdded={fetchEmployees} />
+                        <table className="min-w-full text-center text-sm font-light">
+                            <thead className="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-neutral-900">
+                                <tr>
+                                    <th onClick={() => sortEmployees("name")}>Name</th>
+                                    <th onClick={() => sortEmployees("email")}>Email</th>
+                                    <th onClick={() => sortEmployees("phone_number")}>Phone Number</th>
+                                    <th onClick={() => sortEmployees("company")}>Company</th>
+                                    <th onClick={() => sortEmployees("lcat")}>LCAT</th>
+                                    <th onClick={() => sortEmployees("assigned_team")}>Assigned Team</th>
+                                    <th onClick={() => sortEmployees("start_date")}>Start Date</th>
+                                    <th>Team Lead?</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {employees.map((employee) => (
+                                    <tr className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600" key={employee.id}>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.name}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.email}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.phone_number}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.company}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.lcat}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.assigned_team}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.start_date}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">{employee.is_team_lead ? 'Yes' : 'No'}</td>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <button onClick={() => handleEdit(employee)}>Edit</button>
+                                            <button onClick={() => handleUpdateTerminationDate(employee)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        {editingEmployee && (
+                            <Modal show={editingEmployee} onClose={handleCloseEdit}>
+                                <EditEmployee
+                                    employee={editingEmployee}
+                                    onClose={handleCloseEdit}
+                                />
+                            </Modal>
+                        )}
 
-            {updatingTerminationDate && (
-                <Modal show={updatingTerminationDate} onClose={handleCloseUpdateTerminationDate}>
-                    <UpdateTerminationDate
-                        employee={updatingTerminationDate}
-                        onClose={handleCloseUpdateTerminationDate}
-                    />
-                </Modal>
-            )}
+                        {updatingTerminationDate && (
+                            <Modal show={updatingTerminationDate} onClose={handleCloseUpdateTerminationDate}>
+                                <UpdateTerminationDate
+                                    employee={updatingTerminationDate}
+                                    onClose={handleCloseUpdateTerminationDate}
+                                />
+                            </Modal>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

@@ -7,7 +7,7 @@ import EmployeeList from './components/EmployeeList.js';
 function App() {
     const [refreshKey, setRefreshKey] = useState(0);
     return (
-        <div className="App">
+        <div className="App container mx-auto my-4 px-4">
             <EmployeeList />
         </div>
     );
